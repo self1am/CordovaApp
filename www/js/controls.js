@@ -9,6 +9,7 @@ class Controls {
             case "KEYS":
                 this.#addKeyboardListeners();
                 this.#addDeviceOrientationListeners();
+                this.#addTouchListeners();
                 break;
             case "DUMMY":
                 this.forward = true;
@@ -64,9 +65,27 @@ class Controls {
 
                 this.left = tiltLR < -tiltThreshold;
                 this.right = tiltLR > tiltThreshold;
-                this.forward = tiltFB < -tiltThreshold;
-                this.reverse = tiltFB > tiltThreshold;
             });
         }
+    }
+
+    #addTouchListeners() {
+        document.addEventListener('touchstart', (event) => {
+            // Get the touch position relative to the screen width
+            const touchX = event.touches[0].clientX;
+            const screenWidth = window.innerWidth;
+
+            if (touchX > screenWidth / 2) {
+                this.forward = true;
+            } else {
+                this.reverse = true;
+            }
+        });
+
+        document.addEventListener('touchend', (event) => {
+            // Reset forward and reverse when touch ends
+            this.forward = false;
+            this.reverse = false;
+        });
     }
 }
