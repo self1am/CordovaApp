@@ -54,19 +54,16 @@ class Controls {
     }
 
     #addDeviceOrientationListeners() {
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', (event) => {
-                // Assuming landscape mode with default forward direction
-                const tiltLR = event.gamma; // left-right tilt in degrees
-                const tiltFB = event.beta; // forward-backward tilt in degrees
+        window.addEventListener('deviceorientation', (event) => {
+            // Assuming landscape mode with default forward direction
+            const tiltLR = event.beta * Math.PI / 180; // left-right tilt in degrees
 
-                // Threshold values for detecting movement
-                const tiltThreshold = 15;
+            // Threshold values for detecting movement
+            const tiltThreshold = 15;
 
-                this.left = tiltLR < -tiltThreshold;
-                this.right = tiltLR > tiltThreshold;
-            });
-        }
+            this.left = tiltLR < -tiltThreshold;
+            this.right = tiltLR > tiltThreshold;
+        });
     }
 
     #addTouchListeners() {
